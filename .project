@@ -32,9 +32,14 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>appengine-client_src</name>
+			<name>actionservice_src</name>
 			<type>2</type>
-			<locationURI>_android_appengine_client_c83f7935/src</locationURI>
+			<locationURI>_android_actionservice_65c9ffbf/src</locationURI>
+		</link>
+		<link>
+			<name>appengineclient_src</name>
+			<type>2</type>
+			<locationURI>_android_appengineclient_8421052e/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
