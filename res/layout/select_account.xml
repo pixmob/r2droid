@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/background" android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:background="@drawable/header">
+        <ImageView android:layout_width="wrap_content"
+            android:background="@drawable/header" android:src="@drawable/logo"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dip"></ImageView>
+    </LinearLayout>
+    <TextView android:layout_width="match_parent" android:id="@+id/textView1"
+        android:text="@string/select_account" android:layout_height="wrap_content"
+        android:padding="6dip"></TextView>
+    <ListView android:layout_width="match_parent" android:id="@+id/android:list"
+        android:layout_height="wrap_content" android:layout_weight="1"
+        android:paddingLeft="6dip" android:paddingRight="6dip"></ListView>
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" android:orientation="horizontal"
+        style="@android:style/ButtonBar">
+        <!-- Left spacer -->
+        <View android:layout_width="0dip" android:layout_height="fill_parent"
+            android:layout_weight="1" />
+        <Button android:layout_width="0dip"
+            android:layout_weight="1" android:layout_height="wrap_content"
+            android:id="@+id/sign_in_button" android:text="@string/sign_in"
+            android:onClick="onSignIn" android:enabled="false"></Button>
+        <!-- Right spacer -->
+        <View android:layout_width="0dip" android:layout_height="fill_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
+</LinearLayout>

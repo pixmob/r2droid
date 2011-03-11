@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">R2droid</string>
+    <string name="device_registration_service">Device Registration Service</string>
+    <string name="device_is_online">Your device is online.</string>
+    <string name="device_is_offline">Your device is offline.</string>
+    <string name="updating_device_failed">Device update failed.</string>
+    <string name="updating_device">Updating device status...</string>
+    <string name="checking_account">Checking account...</string>
+    <string name="command_url">Send your commands
+        from\nr2droidhq.appspot.com.
+    </string>
+    <string name="sign_in">Sign In</string>
+    <string name="select_account">Select an account:</string>
+    <string name="c2dm_service_not_available_error">Service not available: try later.</string>
+    <string name="c2dm_phone_registration_error">Your device is not supported.</string>
+    <string name="network_error">Network error: try later.</string>
+    <string name="auth_failed_error">Google authentication failed.</string>
+    <string name="device_registration_error">Device registration failed: try later.</string>
+    <string name="device_unregistration_error">Device unregistration failed: try later.
+    </string>
+    <string name="auth_pending">This application needs your authorization in
+        order to use an account.\nLook at the notification bar to
+        accept this authorization and try again.</string>
+    <string name="unknown_error">Unknown error: %1$s</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="error">Sorry!</string>
+    <string name="please_wait">Please wait</string>
+    <string name="ok">OK</string>
+    <string name="no_account_found">No Google account found!</string>
+    <string name="account_required">Please select a Google account for connecting
+        your device.</string>
+    <string name="command_executor_service">Command Executor Service</string>
+    <string name="command_queue_full">Command queue is full!</string>
+    <string name="command_execution_failed">Command execution failed:\n%1$s</string>
+    <string name="executing_command">Executing command: %1$s</string>
+    <string name="tap_to_cancel_command">Tap to cancel command execution</string>
+</resources>

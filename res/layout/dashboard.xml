@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_height="match_parent"
+    android:layout_width="match_parent" android:background="@color/background">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:background="@drawable/header">
+        <ImageView android:layout_width="wrap_content"
+            android:background="@drawable/header" android:src="@drawable/logo"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dip"></ImageView>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:gravity="center">
+        <ImageView android:layout_width="wrap_content"
+            android:src="@drawable/online" android:padding="4dip"
+            android:layout_height="match_parent" android:id="@+id/status_icon"></ImageView>
+        <TextView android:layout_width="wrap_content"
+            android:text="@string/device_is_online"
+            android:layout_height="match_parent" android:gravity="center_vertical"
+            android:id="@+id/status_text"></TextView>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:gravity="center"
+            android:id="@+id/account_name"></TextView>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_weight="1">
+        <TextView android:layout_weight="1" android:text="@string/command_url"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:gravity="center"></TextView>
+    </LinearLayout>
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" android:orientation="horizontal"
+        style="@android:style/ButtonBar">
+        <Button android:layout_width="0dip"
+            android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="@string/disconnect" android:id="@+id/disconnect_button"
+            android:onClick="onDisconnect"></Button>
+        <Button android:layout_width="0dip"
+            android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="@string/connect" android:id="@+id/connect_button"
+            android:onClick="onConnect"></Button>
+    </LinearLayout>
+</LinearLayout>

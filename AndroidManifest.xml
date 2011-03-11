@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2011 Alexandre Roman
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pixmob.r2droid" android:versionName="1.0"
+    android:versionCode="100">
+    <uses-sdk android:targetSdkVersion="8"
+        android:minSdkVersion="8"></uses-sdk>
+    <permission android:name="com.pixmob.r2droid.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.pixmob.r2droid.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"></uses-permission>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"></uses-permission>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <application android:label="@string/app_name"
+        android:icon="@drawable/icon" android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity android:name="DashboardActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:label="@string/select_account"
+            android:name="SelectAccountActivity"></activity>
+        <receiver android:name="com.google.android.c2dm.C2DMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.pixmob.r2droid" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="com.pixmob.r2droid" />
+            </intent-filter>
+        </receiver>
+        <service android:name="C2DMReceiver" />
+        <service android:name="DeviceRegistrationService"
+            android:label="@string/device_registration_service">
+            <intent-filter>
+                <action android:name="com.pixmob.r2droid.intent.action.CONNECT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.pixmob.r2droid.intent.action.DISCONNECT" />
+            </intent-filter>
+            <intent-filter>
+                <action
+                    android:name="com.pixmob.r2droid.intent.action.C2DM_REGISTERED" />
+            </intent-filter>
+            <intent-filter>
+                <action
+                    android:name="com.pixmob.r2droid.intent.action.C2DM_UNREGISTERED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.pixmob.r2droid.intent.action.C2DM_ERROR" />
+            </intent-filter>
+        </service>
+        <service android:name="CommandExecutorService"
+            android:label="@string/command_executor_service">
+            <intent-filter>
+                <action
+                    android:name="com.pixmob.r2droid.intent.action.EXECUTE_COMMAND" />
+            </intent-filter>
+            <intent-filter>
+                <action
+                    android:name="com.pixmob.r2droid.intent.action.CANCEL_COMMAND" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest> 
