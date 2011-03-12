@@ -1,6 +1,6 @@
-[submodule "deps\\appengineclient"]
-	path = deps\\appengineclient
+[submodule "deps/appengineclient"]
+	path = deps/appengineclient
 	url = https://github.com/pixmob/appengineclient.git
-[submodule "deps\\actionservice"]
-	path = deps\\actionservice
+[submodule "deps/actionservice"]
+	path = deps/actionservice
 	url = https://github.com/pixmob/actionservice.git
