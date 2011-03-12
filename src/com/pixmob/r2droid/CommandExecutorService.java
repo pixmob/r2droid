@@ -80,6 +80,9 @@ public class CommandExecutorService extends ActionService {
     protected void handleAction(Intent intent)
             throws ActionExecutionFailedException, InterruptedException {
         final String command = intent.getStringExtra(KEY_COMMAND);
+        if (DEV) {
+            Log.i(TAG, "Executing command: " + command);
+        }
         final String msg = String.format(getString(R.string.executing_command),
             command);
         final Notification notification = new Notification(
@@ -107,6 +110,9 @@ public class CommandExecutorService extends ActionService {
             throw new ActionExecutionFailedException(
                     "Command execution failed: " + command, e);
         } finally {
+            if (DEV) {
+                Log.i(TAG, "Command finished: " + command);
+            }
             stopForeground(true);
         }
     }
@@ -114,6 +120,9 @@ public class CommandExecutorService extends ActionService {
     @Override
     protected void onActionError(Intent intent, Exception e) {
         final String command = intent.getStringExtra(KEY_COMMAND);
+        if (DEV) {
+            Log.w(TAG, "Command execution failed: " + command, e);
+        }
         if (uiHandler != null) {
             final Message m = new Message();
             m.what = UIHandler.ERROR;
