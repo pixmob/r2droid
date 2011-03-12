@@ -35,6 +35,8 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
 
+import com.pixmob.actionservice.ActionExecutionFailedException;
+
 /**
  * Implementation for supported commands.
  * @author Pixmob
@@ -49,7 +51,7 @@ final class Commands {
      * Make the device ring.
      */
     public static void ring(Context context)
-            throws CommandExecutionFailedException, InterruptedException {
+            throws ActionExecutionFailedException, InterruptedException {
         final Uri ringtoneUri = RingtoneManager.getActualDefaultRingtoneUri(
             context, RingtoneManager.TYPE_RINGTONE);
         final MediaPlayer player = new MediaPlayer();
@@ -57,13 +59,13 @@ final class Commands {
         try {
             player.setDataSource(context, ringtoneUri);
         } catch (IOException e) {
-            throw new CommandExecutionFailedException(
+            throw new ActionExecutionFailedException(
                     "Failed to initialize MediaPlayer for " + ringtoneUri, e);
         }
         try {
             player.prepare();
         } catch (IOException e) {
-            throw new CommandExecutionFailedException(
+            throw new ActionExecutionFailedException(
                     "Failed to prepare MediaPlayer for " + ringtoneUri, e);
         }
         
@@ -96,7 +98,7 @@ final class Commands {
     }
     
     public static void say(Context context, String text)
-            throws CommandExecutionFailedException, InterruptedException {
+            throws ActionExecutionFailedException, InterruptedException {
         final CountDownLatch initBarrier = new CountDownLatch(1);
         if (DEV) {
             Log.d(TAG, "Initializing TTS");
@@ -120,7 +122,7 @@ final class Commands {
             Locale locale = context.getResources().getConfiguration().locale;
             final int languageResult = tts.isLanguageAvailable(locale);
             if (TextToSpeech.LANG_MISSING_DATA == languageResult) {
-                throw new CommandExecutionFailedException(
+                throw new ActionExecutionFailedException(
                         "Missing text-to-speech data: "
                                 + "you may install TTS package from Android Market");
             }

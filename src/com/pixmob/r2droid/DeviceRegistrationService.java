@@ -32,23 +32,20 @@ import static com.pixmob.r2droid.Constants.TAG;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.http.client.methods.HttpGet;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Intent;
 import android.net.http.AndroidHttpClient;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.util.Log;
 
 import com.google.android.c2dm.C2DMessaging;
+import com.pixmob.actionservice.ActionExecutionFailedException;
+import com.pixmob.actionservice.ActionService;
 import com.pixmob.appengine.client.AppEngineAuthenticationException;
 import com.pixmob.appengine.client.AppEngineClient;
 
@@ -56,7 +53,7 @@ import com.pixmob.appengine.client.AppEngineClient;
  * Device registration service.
  * @author Pixmob
  */
-public class DeviceRegistrationService extends Service {
+public class DeviceRegistrationService extends ActionService {
     public static final String ACTION_CONNECT = "com.pixmob.r2droid.intent.action.CONNECT";
     public static final String ACTION_DISCONNECT = "com.pixmob.r2droid.intent.action.DISCONNECT";
     public static final String ACTION_UPDATE_UI = "com.pixmob.r2droid.intent.action.UPDATE_UI";
@@ -68,14 +65,14 @@ public class DeviceRegistrationService extends Service {
     public static final int STATUS_UPDATE_DONE = 1;
     private static final int STATUS_UPDATE_FOREGROUND = 2;
     private static final int HTTP_SC_OK = 200;
-    private final BlockingQueue<String> pendingActions = new ArrayBlockingQueue<String>(
-            2);
-    private Thread actionDispatcher;
     private AndroidHttpClient httpClient;
     private AppEngineClient gaeClient;
     private PendingIntent dashboardIntent;
     private NotificationManager nm;
-    private PowerManager.WakeLock wakeLock;
+    
+    public DeviceRegistrationService() {
+        super("R2droid Device Registration", 30 * 1000, 2);
+    }
     
     @Override
     public void onCreate() {
@@ -89,22 +86,11 @@ public class DeviceRegistrationService extends Service {
         dashboardIntent = PendingIntent.getActivity(this, 0, new Intent(this,
                 DashboardActivity.class), 0);
         nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        
-        final PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-            DeviceRegistrationService.class.getName());
-        
-        actionDispatcher = new ActionDispatcher();
-        actionDispatcher.start();
     }
     
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (actionDispatcher != null) {
-            actionDispatcher.interrupt();
-            actionDispatcher = null;
-        }
         if (gaeClient != null) {
             gaeClient.close();
             gaeClient = null;
@@ -115,8 +101,6 @@ public class DeviceRegistrationService extends Service {
         }
         nm = null;
         dashboardIntent = null;
-        wakeLock = null;
-        pendingActions.clear();
     }
     
     private boolean configureClient() {
@@ -139,14 +123,17 @@ public class DeviceRegistrationService extends Service {
         if (ACTION_C2DM_ERROR.equals(action)) {
             onC2DMError(intent.getStringExtra(KEY_ERROR));
         } else if (action != null) {
-            addActionToQueue(action);
+            return super.onStartCommand(intent, flags, startId);
         }
         return START_NOT_STICKY;
     }
     
-    private void handleAction(String action) {
+    @Override
+    protected void handleAction(Intent intent)
+            throws ActionExecutionFailedException, InterruptedException {
         startForeground();
         
+        final String action = intent.getAction();
         if (ACTION_CONNECT.equals(action)) {
             try {
                 connect();
@@ -381,18 +368,6 @@ public class DeviceRegistrationService extends Service {
         stopForeground(true);
     }
     
-    private void addActionToQueue(String action) {
-        if (action != null) {
-            try {
-                pendingActions.put(action);
-            } catch (InterruptedException e) {
-                if (DEV) {
-                    Log.d(TAG, "Failed to queue action: " + action, e);
-                }
-            }
-        }
-    }
-    
     private static String urlEncode(String str) {
         String encoded = str;
         try {
@@ -401,55 +376,5 @@ public class DeviceRegistrationService extends Service {
             Log.wtf(TAG, "UTF-8 encoding is unavailable", e);
         }
         return encoded;
-    }
-    
-    /**
-     * Internal action dispatcher.
-     * @author Pixmob
-     */
-    private class ActionDispatcher extends Thread {
-        public ActionDispatcher() {
-            super("R2droid Action Dispatcher");
-        }
-        
-        @Override
-        public void run() {
-            boolean running = true;
-            
-            String nextAction = null;
-            while (running) {
-                try {
-                    nextAction = pendingActions.poll(30, TimeUnit.SECONDS);
-                    if (nextAction == null) {
-                        if (DEV) {
-                            Log.d(TAG, "No action was made recently: "
-                                    + "action dispatcher is being stopped");
-                        }
-                        running = false;
-                        stopSelf();
-                    } else {
-                        if (DEV) {
-                            Log.d(TAG, "Handling action: " + nextAction);
-                        }
-                        wakeLock.acquire();
-                        try {
-                            handleAction(nextAction);
-                        } finally {
-                            wakeLock.release();
-                        }
-                    }
-                } catch (InterruptedException e) {
-                    if (DEV) {
-                        Log.d(TAG, "Action dispatcher was interrupted");
-                    }
-                    running = false;
-                } catch (Exception e) {
-                    if (DEV) {
-                        Log.w(TAG, "Error when dispatching action: "
-                                + nextAction, e);
-                    }
-                }
-            }
-        }
     }
 }
